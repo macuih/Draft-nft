@@ -12,6 +12,7 @@ npm i @openzeppelin/contracts@4.5.0
 ##had to do this after installs:
 sudo npm install -g npm@latest
 npm install --save-dev hardhat @nomicfoundation/hardhat-toolbox ethers
+npm install react-router-dom react-bootstrap ipfs-http-client buffer
 
 
 
