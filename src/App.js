@@ -18,8 +18,8 @@ import addresses from './contract-addresses.json';
 import './App.css';
 
 // IPFS Infura config
-const projectId = 'YOUR_INFURA_PROJECT_ID';       // <-- Replace with actual
-const projectSecret = 'YOUR_INFURA_PROJECT_SECRET'; // <-- Replace with actual
+const projectId = 'd1e9e90be790484dbe31ae093a8592d7';       // <-- Replace with actual
+const projectSecret = 'cgQrPu1cXaH1vwPKhKoaXD+/x+hRwZKeNeb6WMjfzKoskifx/IhL0Q'; // <-- Replace with actual
 const auth = 'Basic ' + Buffer.from(projectId + ':' + projectSecret).toString('base64');
 
 // Create IPFS client
