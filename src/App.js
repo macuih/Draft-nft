@@ -4,6 +4,7 @@ import { ethers } from 'ethers';
 import { Spinner } from 'react-bootstrap';
 import { create } from 'ipfs-http-client';
 import { Buffer } from 'buffer';
+window.Buffer = Buffer; // 👈 Webpack 5+ fix for buffer
 
 import Header from './Header';
 import Home from './Home';
@@ -17,12 +18,12 @@ import addresses from './contract-addresses.json';
 
 import './App.css';
 
-// IPFS Infura config
-const projectId = 'd1e9e90be790484dbe31ae093a8592d7';       // <-- Replace with actual
-const projectSecret = 'cgQrPu1cXaH1vwPKhKoaXD+/x+hRwZKeNeb6WMjfzKoskifx/IhL0Q'; // <-- Replace with actual
+// INFURA IPFS credentials (replace with your actual ID & secret)
+const projectId = 'YOUR_INFURA_PROJECT_ID';
+const projectSecret = 'YOUR_INFURA_PROJECT_SECRET';
 const auth = 'Basic ' + Buffer.from(projectId + ':' + projectSecret).toString('base64');
 
-// Create IPFS client
+// Create IPFS client instance
 const ipfsClient = create({
   host: 'ipfs.infura.io',
   port: 5001,
@@ -35,8 +36,6 @@ const ipfsClient = create({
 
 function App() {
   const [account, setAccount] = useState('');
-  const [provider, setProvider] = useState(null);
-  const [signer, setSigner] = useState(null);
   const [nftContract, setNFTContract] = useState(null);
   const [marketplaceContract, setMarketplaceContract] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -44,7 +43,7 @@ function App() {
   const loadBlockchainData = async () => {
     try {
       if (!window.ethereum) {
-        alert("MetaMask not found. Please install it to use this app.");
+        alert("MetaMask not found. Please install MetaMask to use this DApp.");
         return;
       }
 
@@ -57,13 +56,11 @@ function App() {
       const marketplace = new ethers.Contract(addresses.marketplace, Marketplace.abi, signer);
 
       setAccount(account);
-      setProvider(provider);
-      setSigner(signer);
       setNFTContract(nft);
       setMarketplaceContract(marketplace);
       setLoading(false);
     } catch (error) {
-      console.error("Blockchain connection error:", error);
+      console.error("Error loading blockchain data:", error);
     }
   };
 
