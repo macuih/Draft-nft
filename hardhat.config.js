@@ -12,7 +12,7 @@ module.exports = {
   },
   networks: {
     localhost: {
-      url: "http://ec2-XX-XX-XX-XX.us-west-2.compute.amazonaws.com:8545", // your EC2 public DNS
+      url: "http://ec2-3-145-26-64.us-east-2.compute.amazonaws.com:8545", // your EC2 public DNS
       chainId: 31337,
     },
   },
