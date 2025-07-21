@@ -19,8 +19,8 @@ import addresses from './contract-addresses.json';
 import './App.css';
 
 // INFURA IPFS credentials (replace with your actual ID & secret)
-const projectId = 'YOUR_INFURA_PROJECT_ID';
-const projectSecret = 'YOUR_INFURA_PROJECT_SECRET';
+const projectId = 'd1e9e90be790484dbe31ae093a8592d7';
+const projectSecret = 'cgQrPu1cXaH1vwPKhKoaXD+/x+hRwZKeNeb6WMjfzKoskifx/IhL0Q';
 const auth = 'Basic ' + Buffer.from(projectId + ':' + projectSecret).toString('base64');
 
 // Create IPFS client instance
