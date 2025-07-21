@@ -13,12 +13,13 @@ import MyPurchases from './MyPurchases';
 
 import NFT from './NFT.json';
 import Marketplace from './Marketplace.json';
+import addresses from './contract-addresses.json';
 
 import './App.css';
 
-// IPFS credentials (use dotenv in production)
-const projectId = 'XXXXXXXXXXXXX';
-const projectSecret = 'XXXXXXXXXXXX';
+// IPFS Infura config
+const projectId = 'YOUR_INFURA_PROJECT_ID';       // <-- Replace with actual
+const projectSecret = 'YOUR_INFURA_PROJECT_SECRET'; // <-- Replace with actual
 const auth = 'Basic ' + Buffer.from(projectId + ':' + projectSecret).toString('base64');
 
 // Create IPFS client
@@ -43,7 +44,7 @@ function App() {
   const loadBlockchainData = async () => {
     try {
       if (!window.ethereum) {
-        alert("MetaMask not found. Please install MetaMask.");
+        alert("MetaMask not found. Please install it to use this app.");
         return;
       }
 
@@ -52,19 +53,8 @@ function App() {
       const signer = await provider.getSigner();
       const account = await signer.getAddress();
 
-      const network = await provider.getNetwork();
-      const chainId = network.chainId;
-
-      const nftNetwork = NFT.networks[chainId];
-      const marketplaceNetwork = Marketplace.networks[chainId];
-
-      if (!nftNetwork || !marketplaceNetwork) {
-        alert("Smart contracts not deployed to this network.");
-        return;
-      }
-
-      const nft = new ethers.Contract(nftNetwork.address, NFT.abi, signer);
-      const marketplace = new ethers.Contract(marketplaceNetwork.address, Marketplace.abi, signer);
+      const nft = new ethers.Contract(addresses.nft, NFT.abi, signer);
+      const marketplace = new ethers.Contract(addresses.marketplace, Marketplace.abi, signer);
 
       setAccount(account);
       setProvider(provider);
@@ -72,8 +62,8 @@ function App() {
       setNFTContract(nft);
       setMarketplaceContract(marketplace);
       setLoading(false);
-    } catch (err) {
-      console.error("Error loading blockchain data:", err);
+    } catch (error) {
+      console.error("Blockchain connection error:", error);
     }
   };
 
@@ -85,7 +75,7 @@ function App() {
     return (
       <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '80vh' }}>
         <Spinner animation="border" />
-        <p className='mx-3 my-0'>Connecting to blockchain...</p>
+        <p className="mx-3 my-0">Connecting to blockchain...</p>
       </div>
     );
   }
