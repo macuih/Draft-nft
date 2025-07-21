@@ -9,6 +9,13 @@ sudo apt-get install nodejs -y
 npm install --save-dev @nomicfoundation/hardhat-ethers ethers@^6 hardhat-toolbox
 npm i @openzeppelin/contracts@4.5.0
 
+##had to do this after installs:
+sudo npm install -g npm@latest
+npm install --save-dev hardhat @nomicfoundation/hardhat-toolbox ethers
+
+
+
+
 
 
 npx create-react-app nft
