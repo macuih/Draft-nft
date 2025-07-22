@@ -7,6 +7,10 @@ export default function MyListedItems({ marketplace, nft, account }) {
   const [soldItems, setSoldItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Helper to convert ipfs:// to https://gateway.pinata.cloud/ipfs/
+  const resolveIPFS = (uri) =>
+    uri.startsWith("ipfs://") ? uri.replace("ipfs://", "https://gateway.pinata.cloud/ipfs/") : uri;
+
   const loadListedItems = async () => {
     const itemCount = await marketplace.getItemCount();
     let listed = [];
@@ -15,22 +19,27 @@ export default function MyListedItems({ marketplace, nft, account }) {
     for (let i = 1; i <= itemCount; i++) {
       const item = await marketplace.items(i);
       if (item.seller.toLowerCase() === account.toLowerCase()) {
-        const uri = await nft.tokenURI(item.tokenId);
-        const response = await fetch(uri);
-        const metadata = await response.json();
-        const totalPrice = await marketplace.getTotalPrice(item.itemId);
+        try {
+          const uri = await nft.tokenURI(item.tokenId);
+          const resolvedUri = resolveIPFS(uri);
+          const response = await fetch(resolvedUri);
+          const metadata = await response.json();
+          const totalPrice = await marketplace.getTotalPrice(item.itemId);
 
-        const listedItem = {
-          totalPrice,
-          itemId: item.itemId,
-          name: metadata.name,
-          description: metadata.description,
-          image: metadata.image,
-          sold: item.sold
-        };
+          const listedItem = {
+            totalPrice,
+            itemId: item.itemId,
+            name: metadata.name,
+            description: metadata.description,
+            image: resolveIPFS(metadata.image),
+            sold: item.sold
+          };
 
-        listed.push(listedItem);
-        if (item.sold) sold.push(listedItem);
+          listed.push(listedItem);
+          if (item.sold) sold.push(listedItem);
+        } catch (err) {
+          console.error(`Failed to fetch metadata for item ${i}:`, err);
+        }
       }
     }
 
