@@ -19,6 +19,14 @@ npm install react-router-dom react-bootstrap ipfs-http-client buffer
 ##for pinata:
 npm install @pinata/sdk
 
+##for Server.js (not compatible with node 22):
+sudo apt remove nodejs
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt install -y nodejs
+
+node -v
+# Should show v20.x.x
+
 
 
 
