@@ -13,7 +13,8 @@ const port = 5000;
 app.use(cors());
 app.use(express.json());
 
-const pinata = pinataSDK({ pinataJWTKey: process.env.PINATA_JWT });
+const PinataClient = require('@pinata/sdk');
+const pinata = new PinataClient({ pinataJWTKey: process.env.PINATA_JWT }); 
 
 app.post('/upload', upload.single('file'), async (req, res) => {
   try {
