@@ -4,3 +4,7 @@ npm init -y
 npm install express cors multer @pinata/sdk dotenv
 
 vi .env
+
+cd backend
+node server.js
+
