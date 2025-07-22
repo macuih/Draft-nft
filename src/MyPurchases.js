@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ethers } from 'ethers';
 import { Row, Col, Card } from 'react-bootstrap';
 
@@ -6,34 +6,44 @@ const MyPurchases = ({ marketplace, nft, account }) => {
   const [loading, setLoading] = useState(true);
   const [purchases, setPurchases] = useState([]);
 
-  const loadPurchasedItems = async () => {
-    const itemCount = await marketplace.getItemCount();
-    const purchased = [];
+  const loadPurchasedItems = useCallback(async () => {
+    try {
+      const itemCount = await marketplace.getItemCount();
+      const purchased = [];
 
-    for (let i = 1; i <= itemCount; i++) {
-      const item = await marketplace.items(i);
-      if (item.sold && item.buyer?.toLowerCase?.() === account.toLowerCase()) {
-        const uri = await nft.tokenURI(item.tokenId);
-        const response = await fetch(uri);
-        const metadata = await response.json();
-        const totalPrice = await marketplace.getTotalPrice(item.itemId);
+      for (let i = 1; i <= itemCount; i++) {
+        const item = await marketplace.items(i);
 
-        purchased.push({
-          totalPrice,
-          name: metadata.name,
-          description: metadata.description,
-          image: metadata.image
-        });
+        if (
+          item.sold &&
+          item.buyer &&
+          item.buyer.toLowerCase() === account.toLowerCase()
+        ) {
+          const uri = await nft.tokenURI(item.tokenId);
+          const response = await fetch(uri);
+          const metadata = await response.json();
+          const totalPrice = await marketplace.getTotalPrice(item.itemId);
+
+          purchased.push({
+            totalPrice,
+            name: metadata.name,
+            description: metadata.description,
+            image: metadata.image,
+          });
+        }
       }
-    }
 
-    setPurchases(purchased);
-    setLoading(false);
-  };
+      setPurchases(purchased);
+    } catch (err) {
+      console.error("Failed to load purchases:", err);
+    } finally {
+      setLoading(false);
+    }
+  }, [marketplace, nft, account]); // ✅ include dependencies
 
   useEffect(() => {
     loadPurchasedItems();
-  }, []);
+  }, [loadPurchasedItems]);
 
   if (loading) {
     return (
