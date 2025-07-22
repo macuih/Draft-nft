@@ -1,0 +1,18 @@
+contracts:
+Both contracts
+
+src:
+App.js
+Header.js
+Create.js
+MyListedItems.js
+MyPurchases.js
+
+mkdir Backend:
+Server.js
+.env with JWT secret key in Pinata
+
+mkdir Scripts:
+Deploy.js
+
+hardhat.config.js
