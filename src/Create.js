@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Spinner, Row, Col, Form, Button } from 'react-bootstrap';
 import { Buffer } from 'buffer';
+import { ethers } from 'ethers'; // ✅ FIXED: ethers imported properly
 
 const Create = ({ marketplace, nft, account, ipfsClient }) => {
   const [image, setImage] = useState('');
@@ -68,6 +69,7 @@ const Create = ({ marketplace, nft, account, ipfsClient }) => {
           <Form.Control
             type="text"
             placeholder="Name"
+            value={name}
             onChange={(e) => setName(e.target.value)}
             required
           />
@@ -77,6 +79,7 @@ const Create = ({ marketplace, nft, account, ipfsClient }) => {
           <Form.Control
             as="textarea"
             placeholder="Description"
+            value={description}
             onChange={(e) => setDescription(e.target.value)}
             required
           />
@@ -86,6 +89,7 @@ const Create = ({ marketplace, nft, account, ipfsClient }) => {
           <Form.Control
             type="number"
             placeholder="Price in ETH"
+            value={price}
             onChange={(e) => setPrice(e.target.value)}
             required
           />
