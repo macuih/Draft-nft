@@ -4,7 +4,7 @@ import { ethers } from 'ethers';
 import { Spinner } from 'react-bootstrap';
 import { create } from 'ipfs-http-client';
 import { Buffer } from 'buffer';
-window.Buffer = Buffer; // 👈 Webpack 5+ fix for buffer
+import './App.css';
 
 import Header from './Header';
 import Home from './Home';
@@ -16,9 +16,10 @@ import NFT from './NFT.json';
 import Marketplace from './Marketplace.json';
 import addresses from './contract-addresses.json';
 
-import './App.css';
+// ✅ Move AFTER all imports to avoid import/first warning
+window.Buffer = Buffer;
 
-// INFURA IPFS credentials (replace with your actual ID & secret)
+// 🔐 Infura IPFS credentials (consider securing in .env)
 const projectId = 'd1e9e90be790484dbe31ae093a8592d7';
 const projectSecret = 'cgQrPu1cXaH1vwPKhKoaXD+/x+hRwZKeNeb6WMjfzKoskifx/IhL0Q';
 const auth = 'Basic ' + Buffer.from(projectId + ':' + projectSecret).toString('base64');
