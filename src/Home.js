@@ -6,6 +6,10 @@ const Home = ({ marketplace, nft, account }) => {
   const [loading, setLoading] = useState(true);
   const [items, setItems] = useState([]);
 
+  // Converts ipfs://... to https://gateway.pinata.cloud/ipfs/...
+  const resolveIPFS = (uri) =>
+    uri.startsWith("ipfs://") ? uri.replace("ipfs://", "https://gateway.pinata.cloud/ipfs/") : uri;
+
   const loadMarketplaceItems = async () => {
     const itemCount = await marketplace.getItemCount();
     let items = [];
@@ -16,7 +20,9 @@ const Home = ({ marketplace, nft, account }) => {
       if (!item.sold) {
         try {
           const uri = await nft.tokenURI(item.tokenId);
-          const response = await fetch(uri);
+          const resolvedUri = resolveIPFS(uri);
+
+          const response = await fetch(resolvedUri);
           const metadata = await response.json();
 
           const totalPrice = await marketplace.getTotalPrice(item.itemId);
@@ -27,7 +33,7 @@ const Home = ({ marketplace, nft, account }) => {
             seller: item.seller,
             name: metadata.name,
             description: metadata.description,
-            image: metadata.image
+            image: resolveIPFS(metadata.image)  // Convert image URI too
           });
         } catch (err) {
           console.error(`Failed to fetch metadata for item ${i}:`, err);
