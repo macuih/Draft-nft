@@ -1,0 +1,15 @@
+Metamask:
+New network
+rpc url: http://ec2 dns:8545
+
+
+Get backend server running:
+cd nft/backend
+node Server.js
+
+Get blockchain running:
+npx hardhat node --hostname "ec2 dns"
+
+Get Dapp running:
+npx hardhat run scripts/deploy.js --network localhost
+npm start
