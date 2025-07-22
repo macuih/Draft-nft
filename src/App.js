@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ethers } from 'ethers';
 import { Spinner } from 'react-bootstrap';
-import { create } from 'ipfs-http-client';
-import { Buffer } from 'buffer';
 import './App.css';
 
 import Header from './Header';
@@ -15,25 +13,6 @@ import MyPurchases from './MyPurchases';
 import NFT from './NFT.json';
 import Marketplace from './Marketplace.json';
 import addresses from './contract-addresses.json';
-
-// ✅ Move AFTER all imports to avoid import/first warning
-window.Buffer = Buffer;
-
-// 🔐 Infura IPFS credentials (consider securing in .env)
-const projectId = 'd1e9e90be790484dbe31ae093a8592d7';
-const projectSecret = 'cgQrPu1cXaH1vwPKhKoaXD+/x+hRwZKeNeb6WMjfzKoskifx/IhL0Q';
-const auth = 'Basic ' + Buffer.from(projectId + ':' + projectSecret).toString('base64');
-
-// Create IPFS client instance
-const ipfsClient = create({
-  host: 'ipfs.infura.io',
-  port: 5001,
-  protocol: 'https',
-  apiPath: '/api/v0',
-  headers: {
-    authorization: auth,
-  },
-});
 
 function App() {
   const [account, setAccount] = useState('');
@@ -82,47 +61,17 @@ function App() {
     <BrowserRouter>
       <Header account={account} />
       <Routes>
-        <Route
-          path="/"
-          element={
-            <Home
-              marketplace={marketplaceContract}
-              nft={nftContract}
-              account={account}
-            />
-          }
-        />
-        <Route
-          path="/create"
-          element={
-            <Create
-              marketplace={marketplaceContract}
-              nft={nftContract}
-              account={account}
-              ipfsClient={ipfsClient}
-            />
-          }
-        />
-        <Route
-          path="/my-listed-items"
-          element={
-            <MyListedItems
-              marketplace={marketplaceContract}
-              nft={nftContract}
-              account={account}
-            />
-          }
-        />
-        <Route
-          path="/my-purchases"
-          element={
-            <MyPurchases
-              marketplace={marketplaceContract}
-              nft={nftContract}
-              account={account}
-            />
-          }
-        />
+        <Route path="/" element={<Home marketplace={marketplaceContract} nft={nftContract} account={account} />} />
+        <Route path="/create" element={
+          <Create
+            marketplace={marketplaceContract}
+            nft={nftContract}
+            account={account}
+            pinataUploadUrl="http://YOUR_BACKEND_SERVER_URL/upload" // 🔗 New backend endpoint
+          />
+        } />
+        <Route path="/my-listed-items" element={<MyListedItems marketplace={marketplaceContract} nft={nftContract} account={account} />} />
+        <Route path="/my-purchases" element={<MyPurchases marketplace={marketplaceContract} nft={nftContract} account={account} />} />
       </Routes>
     </BrowserRouter>
   );
