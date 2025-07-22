@@ -1,6 +1,0 @@
-Need to replace IPFS projectid and project secret in App.js
-
-npx hardhat node --hostname ...ec2 dns...
-
-npx hardhat run scripts/deploy.js --network localhost
-npm start
