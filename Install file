@@ -16,6 +16,9 @@ npm install --save-dev hardhat @nomicfoundation/hardhat-toolbox ethers
 ##had to run this to get dapp running:
 npm install react-router-dom react-bootstrap ipfs-http-client buffer
 
+##for pinata:
+npm install @pinata/sdk
+
 
 
 
